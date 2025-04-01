@@ -1,3 +1,6 @@
+/*
+Write a C program to implement enqueue, dequeue and display operations in a circular queue.
+*/
 #include <stdio.h>
 
 int high=0,low=0,size=4,count=0;
