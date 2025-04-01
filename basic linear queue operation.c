@@ -1,3 +1,7 @@
+/*
+Write a C program to implement enqueue. dequeue and display operations in a simple queue.
+*/
+
 #include <stdio.h>
 
 int high=-1,low=0,size=4;
