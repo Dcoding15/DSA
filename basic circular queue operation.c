@@ -95,3 +95,56 @@ int main(){
 	}
 	return 0;
 }
+/*
+
+1. Insert 
+2. Delete 
+3. Display 
+4. Exit
+Enter the choice:1
+Enter a number: 10
+10 is inserted.
+
+Enter the choice:1
+Enter a number: 20
+20 is inserted.
+
+Enter the choice:1
+Enter a number: 30
+30 is inserted.
+
+Enter the choice:1
+Enter a number: 40
+40 is inserted.
+
+Enter the choice:1
+Queue Overflow.
+
+Enter the choice:3
+10 20 30 40 
+
+Enter the choice:2
+10 is deleted.
+
+Enter the choice:2
+20 is deleted.
+
+Enter the choice:3
+30 40 
+
+Enter the choice:1
+Enter a number: 10
+10 is inserted.
+
+Enter the choice:1
+Enter a number: 20
+20 is inserted.
+
+Enter the choice:3
+30 40 10 20 
+
+Enter the choice:4
+
+ Exiting the program.
+
+*/
