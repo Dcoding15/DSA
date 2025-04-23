@@ -5,7 +5,7 @@
 
 int partition(int low, int high, int arr[])
 {
-	int pivot=arr[0];
+	int pivot=arr[low];
 	int i=low, j=high;
 	while(i<j)
 	{
@@ -24,7 +24,7 @@ int partition(int low, int high, int arr[])
 			arr[j] = tmp;
 		}
 	}
-	arr[0] = arr[j];
+	arr[low] = arr[j];
 	arr[j] = pivot;
 	return j;
 }
@@ -50,7 +50,7 @@ int main()
 	{
 		scanf("%d",&arr[i]);
 	}
-	quick_sort(0, n-1, arr);
+	quick_sort(n-n, n-1, arr);
 	printf("Sorted Elements: ");
 	for(int i=0; i<n; i++)
 	{
@@ -59,7 +59,7 @@ int main()
 	printf("\n");
 }
 /*
-Ouput: -
+Output: -
 Enter the size of array: 5
 Enter elements: 5 4 3 2 1
 Sorted Elements: 1 2 3 4 5
