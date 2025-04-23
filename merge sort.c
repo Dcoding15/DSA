@@ -1,3 +1,5 @@
+// Write a C program to implement the quick sort algorithm.
+// Best/Average/Worst Case: O(n log n)
 #include <stdio.h>
 void merge(int low, int mid, int high, int arr[])
 {
@@ -51,12 +53,26 @@ void merge_sort(int low, int high, int arr[])
 }
 int main()
 {
-    int n=5;
-    int arr[]={5,4,3,2,1};
-    merge_sort(0,n-1,arr);
-    for(int i=0; i<n; i++)
-    {
-        printf("%d ",arr[i]);
-    }
-    return 0;
+	int n;
+	printf("Enter the size of array: ");
+	scanf("%d",&n);
+	int arr[n];
+	printf("Enter elements: ");
+	for(int i=0; i<n; i++)
+	{
+		scanf("%d",&arr[i]);
+	}
+	merge_sort(n-n, n-1, arr);
+	printf("Sorted Elements: ");
+	for(int i=0; i<n; i++)
+	{
+		printf("%d ",arr[i]);
+	}
+	printf("\n");
 }
+/*
+Output: -
+Enter the size of array: 5
+Enter elements: 5 4 3 2 1
+Sorted Elements: 1 2 3 4 5
+*/
