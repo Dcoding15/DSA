@@ -1,237 +1,283 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-struct node
+struct DoubleLinkedList
 {
     int val;
-    struct node* next;
-    struct node* prev;
+    struct DoubleLinkedList* next;
+    struct DoubleLinkedList* prev;
 };
 
-int count=0;
+static int count=0;
+typedef struct DoubleLinkedList* dll;
 
-struct node* create_node(int n)
+dll create_node(int val)
 {
-    struct node* tmp = (struct node*)malloc(sizeof(struct node));
-    tmp->val=n;
-    tmp->next=NULL;
-    tmp->prev=NULL;
-    return tmp;
+	dll tmp = (struct DoubleLinkedList*)malloc(sizeof(struct DoubleLinkedList));
+	tmp->val = val;
+	tmp->next = NULL;
+	tmp->prev = NULL;
+	return tmp;
 }
 
-void make_link(struct node* a, struct node* b, struct node* c)
+void insert_begin(dll head)
 {
-    b->prev=a;
-    b->next=c;
-    a->next=b;
-    c->prev=b;
+	int val;
+	printf("Enter a number: ");
+	scanf("%d",&val);
+	dll tmp = create_node(val);
+	tmp->next=head->next;
+	if(head->next!=NULL)
+    {
+        tmp->next->prev=tmp;
+    }
+	tmp->prev=head;
+	head->next=tmp;
+	count++;
 }
 
-void insert_at_begin(struct node* a, struct node* b)
+void insert_end(dll head)
 {
-    int n;
-    printf("Enter the value: ");
-    scanf("%d",&n);
-    struct node* tmp = create_node(n);
-    if (a->next==b)
-    {
-        make_link(a,tmp,b);
-    }
-    else
-    {
-        make_link(a,tmp,a->next);
-    }
-    count++;
+	int val;
+	printf("Enter a number: ");
+	scanf("%d",&val);
+	dll i=head;
+	dll tmp = create_node(val);
+	while(i->next!=NULL)
+	{
+		i=i->next;
+	}
+	tmp->val=val;
+	i->next=tmp;
+	tmp->prev=i;
+	count++;
 }
 
-void insert_at_mid(struct node* a,struct node*  b)
+void insert_after_node(dll head)
 {
-    int n, position;
-    printf("Enter the value: ");
-    scanf("%d",&n);
-    struct node* tmp = create_node(n);
-    if (a->next==b)
-    {
-        make_link(a,tmp,b);
-        count++;
-    }
-    else
-    {
-        printf("Enter the position [1-%d]: ",count+1);
-        scanf("%d",&position);
-        if (position>count+1)
+	dll i=head;
+	int pos, j=1;
+	if (pos>count && pos<0)
+	{
+		printf("Position exceeds.\n");
+	}
+	else if (count==0)
+	{
+		insert_begin(head);
+	}
+	else
+	{
+		printf("Enter the number after which you want to insert[%d nodes]: ",count);
+		scanf("%d",&pos);
+		if(pos==0)
+		{
+			insert_begin(head);
+		}
+		else
+		{
+			while(i!=NULL)
+			{
+				if(j==pos+1)
+				{
+					int val;
+					printf("Enter a number: ");
+					scanf("%d",&val);
+					dll tmp = create_node(val);
+					tmp->next=i->next;
+                    if(i->next!=NULL)
+                    {
+                        tmp->next->prev=tmp;
+                    }
+					tmp->prev=i;
+					i->next=tmp;
+					count++;
+					break;
+				}
+				i=i->next;
+				j++;
+			}
+		}
+	}
+}
+
+void delete_begin(dll head)
+{
+	if(count==0)
+	{
+		printf("List is empty.\n");
+	}
+	else
+	{
+	    if(head->next->next!=NULL)
         {
-            printf("Linked list out of range.\n");
+            head->next->next->prev=head;
         }
-        else
+		head->next=head->next->next;
+		count--;
+	}
+}
+
+void delete_end(dll head)
+{
+	if(count==0)
+	{
+		printf("List is empty.\n");
+	}
+	else
+	{
+		while(head->next->next!=NULL)
+		{
+			head=head->next;
+		}
+		head->next->prev=NULL;
+		head->next=NULL;
+		count--;
+	}
+}
+
+void delete_after_node(dll head)
+{
+	dll i=head;
+	int pos, j=1;
+	if (count==0)
+	{
+		printf("List is empty.\n");
+	}
+	else
+	{
+		printf("Enter the number after which you want to delete[%d nodes]: ",count-1);
+		scanf("%d",&pos);
+		if (pos>count || pos<0)
+		{
+			printf("Position exceed.\n");
+		}
+		else if(pos==0)
+		{
+			delete_begin(head);
+		}
+		else
+		{
+			while(i!=NULL)
+			{
+				if(j==pos+1)
+				{
+					if (i->next->next==NULL)
+					{
+						delete_end(head);
+						break;
+					}
+					i->next=i->next->next;
+					i->next->prev=i;
+					count--;
+					break;
+				}
+				i=i->next;
+				j++;
+			}
+		}
+	}
+}
+
+void display(dll head)
+{
+    dll i = head->next;
+    dll j = head->prev;
+    while(i!=NULL)
+    {
+        if(i->next==NULL)
         {
-            int i=0;
-            while(1)
-            {
-                if (i++==position-1 && a!=NULL)
-                {
-                    make_link(a->next->prev,tmp,a->next);
-                    count++;
-                    break;
-                }
-                else
-                {
-                    a=a->next;
-                }
-            }
+            j=i;
         }
+        printf("%d->",i->val);
+        i=i->next;
     }
-}
-
-void insert_at_end(struct node* a, struct node*  b)
-{
-    int n;
-    printf("Enter the value: ");
-    scanf("%d",&n);
-    struct node* tmp = create_node(n);
-    while(a->next!=b)
+    printf("NULL\nNULL");
+    while(j!=head && j!=NULL)
     {
-        a=a->next;
-    }
-    make_link(a,tmp,b);
-    count++;
-}
-
-void delete_at_begin(struct node* a, struct node* b)
-{
-    if(a->next==b)
-    {
-        printf("Empty list\n");
-    }
-    else
-    {
-        a->next=a->next->next;
-        a->next->prev=a;
-        count--;
-    }
-}
-
-void delete_at_mid(struct node* a, struct node* b)
-{
-    int position;
-    if (a->next==b)
-    {
-        printf("Empty list\n");
-        count--;
-    }
-    else
-    {
-        printf("Enter the position [1-%d]: ",count+1);
-        scanf("%d",&position);
-        if (position>count+1)
-        {
-            printf("Linked list out of range.\n");
-        }
-        else
-        {
-            int i=0;
-            while(1)
-            {
-                if (i++==position-1 && a!=b)
-                {
-                    a->next=a->next->next;
-                    a->next->prev=a;
-                    count--;
-                    break;
-                }
-                else
-                {
-                    a=a->next;
-                }
-            }
-        }
-    }
-}
-
-void delete_at_end(struct node* a,struct node* b)
-{
-    if (b->prev==a)
-    {
-        printf("Empty list\n");
-    }
-    else
-    {
-        b->prev=b->prev->prev;
-        b->prev->next=b;
-        count--;
-    }
-}
-
-void display(struct node* a,struct node* b)
-{
-    a=a->next;
-    while(a->next!=NULL)
-    {
-        printf("%d->",a->val);
-        a=a->next;
-    }
-    printf("NULL\n");
-    b=b->prev;
-    printf("NULL");
-    while(b->prev!=NULL)
-    {
-        printf("<-%d",b->val);
-        b=b->prev;
+        printf("->%d",j->val);
+        j=j->prev;
     }
     printf("\n");
 }
 
 int main()
 {
-    int choice;
-    struct node* head = create_node(-1);
-    struct node* tail = create_node(-1);
-    head->next=tail;
-    tail->prev=head;
-    printf("Linked List Operations: -\n");
-    printf("1. Insert data at beginning position of list.\n");
-    printf("2. Insert data at spcified position of list.\n");
-    printf("3. Insert data at ending position of list.\n");
-    printf("4. Remove data at beginning position of list.\n");
-    printf("5. Remove data at spcified position of list.\n");
-    printf("6. Remove data at ending position of list.\n");
-    printf("7. Display data of list.\n");
-    printf("8. Exit list operations.\n");
-    while(1)
-    {
-        printf("Enter Your Choice: ");
-        scanf("%d",&choice);
-        if (choice==8)
-        {
-            printf("Operation exited.\n");
-            break;
-        }
-        switch (choice)
-        {
-            case 1:
-                insert_at_begin(head,tail);
-                break;
-            case 2:
-                insert_at_mid(head,tail);
-                break;
-            case 3:
-                insert_at_end(head,tail);
-                break;
-            case 4:
-                delete_at_begin(head,tail);
-                break;
-            case 5:
-                delete_at_mid(head,tail);
-                break;
-            case 6:
-                delete_at_end(head,tail);
-                break;
-            case 7:
-                display(head,tail);
-                break;
-            default:
-                printf("WRONG CHOICE!\n");
-        }
-    }
-    return 0;
+	dll head = create_node(-1);
+	printf("\n----------------MENU------------\n");
+	printf("1. Insert at the beginning.\n");
+	printf("2. Insert at the end.\n");
+	printf("3. Insert After a Particular Node.\n");
+	printf("4. Delete First Node.\n");
+	printf("5. Delete Last Node.\n");
+	printf("6. Delete After a Particular Node.\n");
+	printf("7. Display the List.\n");
+	printf("8. Exit.\n");
+	printf("----------------------------------------------------------------\n");
+	int ch;
+	while(1)
+	{
+		printf("Enter Your Choice: ");
+		scanf("%d",&ch);
+		if (ch==8)
+		{
+			printf("Program exited.\n");
+			break;
+		}
+		switch(ch)
+		{
+			case 1: insert_begin(head); break;
+			case 2: insert_end(head); break;
+			case 3: insert_after_node(head); break;
+			case 4: delete_begin(head); break;
+			case 5: delete_end(head); break;
+			case 6: delete_after_node(head); break;
+			case 7: display(head); break;
+			default: printf("Invalid Choice.\n");
+		}
+	}
+
 }
+
+
+/*
+----------------MENU------------
+1. Insert at the beginning.
+2. Insert at the end.
+3. Insert After a Particular Node.
+4. Delete First Node.
+5. Delete Last Node.
+6. Delete After a Particular Node.
+7. Display the List.
+8. Exit.
+----------------------------------------------------------------
+Enter Your Choice: 1
+Enter a number: 10
+Enter Your Choice: 1
+Enter a number: 20
+Enter Your Choice: 2
+Enter a number: 30
+Enter Your Choice: 7
+20->10->30->NULL
+NULL->30->10->20
+Enter Your Choice: 3
+Enter the number after which you want to insert[3 nodes]: 2
+Enter a number: 40
+Enter Your Choice: 7
+20->10->40->30->NULL
+NULL->30->40->10->20
+Enter Your Choice: 4
+Enter Your Choice: 7
+10->40->30->NULL
+NULL->30->40->10
+Enter Your Choice: 5
+Enter Your Choice: 7
+10->40->NULL
+NULL->40->10
+Enter Your Choice: 6
+Enter the number after which you want to delete[1 nodes]: 1
+Enter Your Choice: 7
+10->NULL
+NULL->10
+Enter Your Choice: 8
+Program exited.
+*/
